@@ -18,7 +18,7 @@ class Pile
   end
 
   def peek_and_tell
-    @cards.empty? ? '' : @cards.last.tell
+    @cards.empty? ? '[]' : @cards.last.tell
   end
 
   def give(card)
@@ -27,5 +27,14 @@ class Pile
 
   def take
     @cards.pop
+  end
+
+  def clear
+    @cards.clear
+  end
+
+  def take_from_pile(pile)
+    @cards = pile.cards.dup
+    pile.clear
   end
 end

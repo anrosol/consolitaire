@@ -5,8 +5,31 @@ class Interface
   end
 
   def paint
-    puts ''
+    result = "\n"
+    result += '??'  + "\t"
+    result += @game.discard_pile.peek_and_tell + "\t"
+    result += "\t"
+    result += @game.final_piles[0].peek_and_tell + "\t"
+    result += @game.final_piles[1].peek_and_tell + "\t"
+    result += @game.final_piles[2].peek_and_tell + "\t"
+    result += @game.final_piles[3].peek_and_tell + "\t"
+    result += "\n"
+    result += "\n"
+    result += @game.work_piles[0].peek_and_tell + "\t"
+    result += @game.work_piles[1].peek_and_tell + "\t"
+    result += @game.work_piles[2].peek_and_tell + "\t"
+    result += @game.work_piles[3].peek_and_tell + "\t"
+    result += @game.work_piles[4].peek_and_tell + "\t"
+    result += @game.work_piles[5].peek_and_tell + "\t"
+    result += @game.work_piles[6].peek_and_tell + "\t"
+    result += "\n"
+    result += "\n"
+    
 
+
+
+puts result
+return
     puts [
       'F',
       'D',

@@ -45,10 +45,14 @@ class Solitaire
 
   def fish
     if @fish_pile.empty?
-      @fish_pile.cards = @discard_pile.cards
-      @discard_pile.cards.clear
+      @fish_pile.take_from_pile(@discard_pile)
     end
     @discard_pile.give(@fish_pile.take)
+  end
+
+  def move(from_pile, to_pile)
+    piles = ['d', 'f1', 'f2', 'f3', 'f4', 'w1', 'w2', 'w3', 'w4', 'w5', 'w6', 'w7'];
+    #if (piles.has(from_pile))
   end
 
   def discard_pile_to_final_pile(i)

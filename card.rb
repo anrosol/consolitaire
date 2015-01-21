@@ -3,18 +3,18 @@ class Card
   attr_reader :name 
   attr_reader :suit
   attr_reader :symbol
-  attr_reader :color
+  attr_reader :red
 
-  def initialize(num, name, suit, symbol, color)
+  def initialize(num, name, suit, symbol, red)
     @num = num
     @name = name
     @suit = suit
     @symbol = symbol
-    @color = color
+    @red = red
   end
 
   def tell 
-    return (@name || @num.to_s) + @symbol
+    "\e[3" + (red ? '1' : '0') + "m" + (@name || @num.to_s) + @symbol + "\e[0m"
   end
 
 end

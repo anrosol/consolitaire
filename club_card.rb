@@ -3,7 +3,7 @@ require_relative 'card'
 class ClubCard < Card
 
   def initialize(num, name=nil)
-    super(num, name, 'Club', "\u2663", 'Black')
+    super(num, name, 'Club', "\u2663", false)
   end
 
 end
