@@ -1,3 +1,5 @@
+require_relative 'card'
+
 class Pile 
   attr_reader :cards
 
@@ -9,32 +11,24 @@ class Pile
     @cards.length
   end
 
-  def empty?
-    @cards.length == 0
-  end
-
-  def peek
-    @cards.last
-  end
-
-  def peek_and_tell
-    @cards.empty? ? '[]' : @cards.last.tell
-  end
-
-  def give(card)
-    @cards.push(card)
-  end
-
-  def take
-    @cards.pop
-  end
-
   def clear
     @cards.clear
   end
 
-  def take_from_pile(pile)
-    @cards = pile.cards.dup
-    pile.clear
+  def empty?
+    @cards.length == 0
+  end
+
+  def current_card
+    @cards.empty? ? nil : @cards.last
+  end
+
+  def add(card)
+    @cards.push(card)
+  end
+
+  def remove
+    @cards.pop
   end
 end
+

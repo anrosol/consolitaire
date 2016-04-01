@@ -1,38 +1,21 @@
-require_relative 'fish_pile'
-require_relative 'discard_pile'
+require_relative 'deck'
 require_relative 'work_pile'
 require_relative 'final_pile'
 
-require_relative 'heart_card'
-require_relative 'diamond_card'
-require_relative 'spade_card'
-require_relative 'club_card'
-
 class Solitaire
-  attr_reader :fish_pile
-  attr_reader :discard_pile
+  attr_reader :deck
   attr_reader :work_piles
   attr_reader :final_piles
 
   def new_game
-    @fish_pile = FishPile.new
-    (1..13).each do |i|
-      name = {1 => 'A', 11 => 'J', 12 => 'Q', 13 => 'K'}
-
-      @fish_pile.give(HeartCard.new(i, name[i]))
-      @fish_pile.give(DiamondCard.new(i, name[i]))
-      @fish_pile.give(SpadeCard.new(i, name[i]))
-      @fish_pile.give(ClubCard.new(i, name[i]))
-    end
-    @fish_pile.shuffle
-
-    @discard_pile = DiscardPile.new
+    @deck = Deck.new
+    @deck.shuffle
 
     @work_piles = [] 
-    (1..7).each do |i|
+    (1..7).reverse_each do |i|
       work_pile = WorkPile.new
       i.times do
-        work_pile.give(@fish_pile.take)
+        work_pile.add(@deck.remove)
       end
       @work_piles.push(work_pile)
     end
@@ -44,33 +27,72 @@ class Solitaire
   end
 
   def fish
-    if @fish_pile.empty?
-      @fish_pile.take_from_pile(@discard_pile)
+    @deck.next_card
+  end
+
+  def move(params)
+    if params[0] == 'd'
+      if params[1] == 'w'
+        deck_to_work(params[2].to_i)
+      end
+
+      if params[1] == 'f'
+        deck_to_final(params[2].to_i)
+      end
     end
-    @discard_pile.give(@fish_pile.take)
-  end
 
-  def move(from_pile, to_pile)
-    piles = ['d', 'f1', 'f2', 'f3', 'f4', 'w1', 'w2', 'w3', 'w4', 'w5', 'w6', 'w7'];
-    #if (piles.has(from_pile))
-  end
+    if params[0] == 'w'
+      if params[2] == 'w'
+        work_to_work(params[1].to_i, params[3].to_i)
+      end
 
-  def discard_pile_to_final_pile(i)
-    if @final_piles[i].allows?(@discard_pile.peek)
-      @final_piles[i].give(@discard_pile.take)
+      if params[2] == 'f'
+        work_to_final(params[1].to_i, params[3].to_i)
+      end
+    end
+
+    if params[0] == 'f'
+      if params[2] == 'w'
+        final_to_work(params[1].to_i, params[3].to_i)
+      end
     end
   end
 
-  def work_pile_to_final_pile(i, j)
-    if @final_piles[i].allows?(@work_piles[j].peek)
-      @final_piles[j].give(@work_piles[i].take)
+  def deck_to_work(work_i)
+    work_pile = @work_piles[work_i]
+    if work_pile.allows?(@deck.current_card)
+      work_pile.add(@deck.remove)
     end
   end
 
-  def discard_pile_to_work_pile(i)
-    if @work_piles[i].allows?(@discard_pile.peek)
-      @work_piles[i].give(@discard_pile.take)
+  def deck_to_final(final_i)
+    final_pile = @final_piles[final_i]
+    if final_pile.allows?(@deck.current_card)
+      final_pile.add(@deck.remove)
     end
   end
 
+  def work_to_final(work_i, final_i)
+    work_pile = @work_piles[work_i]
+    final_pile = @final_piles[final_i]
+    if final_pile.allows?(work_pile.current_card)
+      final_pile.add(work_pile.remove)
+    end
+  end
+
+  def work_to_work(work_i, work_j)
+    work_pile = @work_piles[work_i]
+    work_pile2 = @work_piles[work_j]
+    if work_pile2.allows?(work_pile.current_card)
+      work_pile2.add(work_pile.remove)
+    end
+  end
+
+  def final_to_work(final_i, work_i)
+    final_pile = @final_piles[final_i]
+    work_pile = @work_piles[work_i]
+    if work_pile.allows?(final_pile.current_card)
+      work_pile.add(final_pile.remove)
+    end
+  end
 end

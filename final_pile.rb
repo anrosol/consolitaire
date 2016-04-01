@@ -8,10 +8,11 @@ class FinalPile < Pile
 
   def allows?(card)
     if @cards.empty?
-      return card.num == 1
+      return card.number == 1
     end
     
-    return card.suit == @cards.last.suit && card.num == (@cards.last.num + 1)
+    return card.suit == @cards.last.suit && card.number == (@cards.last.number + 1)
   end
 
 end
+

@@ -1,16 +1,17 @@
 require_relative 'solitaire'
-require_relative 'interface'
+require_relative 'default_view'
 
 solitaire  = Solitaire.new
-interface  = Interface.new(solitaire)
+view = DefaultView.new(solitaire)
 
 solitaire.new_game
 
 message = ''
 
 loop do
-  puts 'ConSolitaire v1.0'
-  interface.paint
+  puts "ConSolitaire"
+
+  view.display
 
   print message + '> '
   message = ''
@@ -19,21 +20,21 @@ loop do
   command, *params = input.split(/\s/)
 
   case command
-    when 'quit'
+    when 'h'
+      print "(h)elp; (q)uit; (n)ew game; (f)ish; (m)ove"
+    when 'q'
       abort
-    when 'exit'
-      abort
-    when 'new'
+    when 'n'
       solitaire.new_game
     when 'f'
       solitaire.fish
-    when 'mv'
-      message = solitaire.move(params[0], params[1])
+    when 'm'
+      solitaire.move(params)
     else
       message = 'invalid comand'
   end
 
   print "\033[K"
-  print "\033[1A\033[K" * 7
+  print "\033[1A\033[K" * 8
 
 end
